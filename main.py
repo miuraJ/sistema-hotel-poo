@@ -2,9 +2,24 @@ from Classes.funcionario import Funcionario
 from Classes.hospede import Hospede
 from Classes.hotel import Hotel
 from Classes.quarto import Quarto
+import os
+import platform
 
 AUTOR = "Inácio Miura"
 SEPARADOR = "=" * 50
+
+
+def limpar_tela():
+    """Limpa a tela do terminal de forma multiplataforma."""
+    if platform.system() == "Windows":
+        os.system('cls')
+    else:  # macOS e Linux
+        os.system('clear')
+
+
+def pausar():
+    """Pausa a execução até o usuário pressionar Enter."""
+    input("\n[Pressione Enter para continuar...]")
 
 
 def exibir_cabecalho():
@@ -246,16 +261,21 @@ def fluxo_consultar_reservas(hospede: Hospede):
 def loop_menu_funcionario(funcionario: Funcionario, hotel: Hotel):
     """Loop do menu do funcionário."""
     while True:
+        limpar_tela()
         opcao = menu_funcionario()
 
         if opcao == "1":
             fluxo_registrar_quarto(funcionario, hotel)
+            pausar()
         elif opcao == "2":
             fluxo_remover_quarto(funcionario, hotel)
+            pausar()
         elif opcao == "3":
             fluxo_registrar_hospede(funcionario, hotel)
+            pausar()
         elif opcao == "4":
             fluxo_cancelar_reserva_funcionario(funcionario, hotel)
+            pausar()
         elif opcao == "0":
             break
         else:
@@ -265,14 +285,18 @@ def loop_menu_funcionario(funcionario: Funcionario, hotel: Hotel):
 def loop_menu_hospede(hospede: Hospede, hotel: Hotel):
     """Loop do menu do hóspede."""
     while True:
+        limpar_tela()
         opcao = menu_hospede(hospede)
 
         if opcao == "1":
             fluxo_fazer_reserva(hospede, hotel)
+            pausar()
         elif opcao == "2":
             fluxo_cancelar_reserva_hospede(hospede, hotel)
+            pausar()
         elif opcao == "3":
             fluxo_consultar_reservas(hospede)
+            pausar()
         elif opcao == "0":
             break
         else:
@@ -284,8 +308,6 @@ def loop_menu_hospede(hospede: Hospede, hotel: Hotel):
 
 def main():
     """Função principal do sistema."""
-    exibir_cabecalho()
-
     # Inicialização
     hotel = Hotel()
     funcionario = Funcionario("Admin", "admin@hotel.com")
@@ -293,10 +315,13 @@ def main():
 
     # Loop principal
     while True:
+        limpar_tela()
+        exibir_cabecalho()
         opcao = menu_principal()
 
         if opcao == "1":
             loop_menu_funcionario(funcionario, hotel)
+            pausar()
         elif opcao == "2":
             if not hotel.get_hospedes():
                 mensagem_sem_hospedes()
@@ -304,6 +329,7 @@ def main():
                 hospede = terminal_busca_hospede(hotel)
                 if hospede:
                     loop_menu_hospede(hospede, hotel)
+            pausar()
         elif opcao == "0":
             print("\nEncerrando sistema... Até logo!")
             break
